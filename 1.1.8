@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+int main() {
+    int m, n;
+    // Read dimensions of matrix A
+    if (scanf("%d %d", &m, &n) != 2) return 0;
+    
+    int A[m][n];
+    // Read elements of matrix A
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &A[i][j]);
+        }
+    }
+    
+    int rB, p;
+    // Read dimensions of matrix B
+    if (scanf("%d %d", &rB, &p) != 2) return 0;
+    
+    // Check if matrix multiplication is possible
+    if (n != rB) {
+        printf("Invalid input\n");
+        return 0;
+    }
+    
+    int B[rB][p];
+    // Read elements of matrix B only if multiplication is possible
+    for (int i = 0; i < rB; i++) {
+        for (int j = 0; j < p; j++) {
+            scanf("%d", &B[i][j]);
+        }
+    }
+    
+    // Perform multiplication and print the resulting matrix
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < p; j++) {
+            int sum = 0;
+            for (int k = 0; k < n; k++) {
+                sum += A[i][k] * B[k][j];
+            }
+            // Always print a space after the integer to match expected trailing spaces
+            printf("%d ", sum);
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
