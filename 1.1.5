@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_N 20
+#define MAX_RESULTS 1000
+
+// Structure to store a found subset
+typedef struct {
+    int data[MAX_N];
+    int size;
+} Subset;
+
+int n;
+int elements[MAX_N];
+int target_sum;
+
+Subset results[MAX_RESULTS];
+int result_count = 0;
+
+int current_subset[MAX_N];
+int current_size = 0;
+
+void backtrack(int index, int current_sum) {
+    // Base case: target sum reached
+    if (current_sum == target_sum) {
+        if (result_count < MAX_RESULTS) {
+            results[result_count].size = current_size;
+            for (int i = 0; i < current_size; i++) {
+                results[result_count].data[i] = current_subset[i];
+            }
+            result_count++;
+        }
+        return;
+    }
+
+    // Pruning: index out of bounds or sum exceeds target
+    if (index == n || current_sum > target_sum) {
+        return;
+    }
+
+    // 1. Include the current element (Discovery choice 1)
+    current_subset[current_size++] = elements[index];
+    backtrack(index + 1, current_sum + elements[index]);
+    current_size--; // Backtrack
+
+    // 2. Exclude the current element (Discovery choice 2)
+    backtrack(index + 1, current_sum);
+}
+
+int main() {
+    // Read input format
+    if (scanf("%d", &n) != 1) return 0;
+    
+    for (int i = 0; i < n; i++) {
+        if (scanf("%d", &elements[i]) != 1) return 0;
+    }
+    
+    if (scanf("%d", &target_sum) != 1) return 0;
+
+    // Start backtracking
+    backtrack(0, 0);
+
+    // Print output based on requirements
+    if (result_count == 0) {
+        printf("-1\n");
+    } else {
+        // Print in reverse order of discovery
+        for (int i = result_count - 1; i >= 0; i--) {
+            for (int j = 0; j < results[i].size; j++) {
+                printf("%d", results[i].data[j]);
+                if (j < results[i].size - 1) {
+                    printf(" ");
+                }
+            }
+            printf(" \n");
+        }
+    }
+
+    return 0;
+}
